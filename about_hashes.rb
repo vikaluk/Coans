@@ -23,7 +23,7 @@ class AboutHashes < Neo::Koan
   def test_accessing_hashes_with_fetch
     hash = { :one => "uno" }
     assert_equal "uno", hash.fetch(:one)
-    assert_raise(nil) do
+    assert_raise(KeyError) do
       hash.fetch(:doesnt_exist)
     end
 
@@ -37,7 +37,7 @@ class AboutHashes < Neo::Koan
     hash[:one] = "eins"
 
     expected = { :one => "eins", :two => "dos" }
-    assert_equal true, hash
+    assert_equal true, expected ==  hash
 
     # Bonus Question: Why was "expected" broken out into a variable
     # rather than used as a literal?
@@ -72,7 +72,7 @@ class AboutHashes < Neo::Koan
 
     assert_equal true, hash != new_hash
 
-    expected = { "jim" => __, "amy" => 20, "dan" => 23, "jenny" => __ }
+    expected = { "jim" => 54, "amy" => 20, "dan" => 23, "jenny" => 26 }
     assert_equal true, expected == new_hash
   end
 
@@ -86,8 +86,8 @@ class AboutHashes < Neo::Koan
     hash2 = Hash.new("dos")
     hash2[:one] = 1
 
-    assert_equal "dos", hash2[:one]
-    assert_equal nil, hash2[:two]
+    assert_equal 1, hash2[:one]
+    assert_equal "dos", hash2[:two]
   end
 
   def test_default_value_is_the_same_object
@@ -96,11 +96,11 @@ class AboutHashes < Neo::Koan
     hash[:one] << "uno"
     hash[:two] << "dos"
 
-    assert_equal __, hash[:one]
-    assert_equal __, hash[:two]
-    assert_equal __, hash[:three]
+    assert_equal ["uno", "dos"], hash[:one]
+    assert_equal ["uno", "dos"], hash[:two]
+    assert_equal ["uno", "dos"], hash[:three]
 
-    assert_equal __, hash[:one].object_id == hash[:two].object_id
+    assert_equal true, hash[:one].object_id == hash[:two].object_id
   end
 
   def test_default_value_with_block
@@ -109,8 +109,8 @@ class AboutHashes < Neo::Koan
     hash[:one] << "uno"
     hash[:two] << "dos"
 
-    assert_equal "uno", hash[:one]
-    assert_equal "dos", hash[:two]
-    assert_equal nil, hash[:three]
+    assert_equal ["uno"], hash[:one]
+    assert_equal ["dos"], hash[:two]
+    assert_equal [], hash[:three]
   end
 end
